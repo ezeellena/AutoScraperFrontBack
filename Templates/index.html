@@ -21,7 +21,7 @@ var data = [];
     console.log(metododos);
     console.log(metodotres);
        $.ajax({
-            url: "/AutoScraper",
+            url: "/ObtenerRegla",
             type: "POST",
             data: JSON.stringify({Link: link, Metodo: [metodo,metododos,metodotres]}),
             contentType: "application/json; charset=utf-8",
@@ -92,7 +92,7 @@ function genera_tabla() {
     <input id="metododos" name="metododos" class="form-control">
   </div>
   <div class="form-group">
-    <label for="metodotres">metododos</label>
+    <label for="metodotres">metodotres</label>
     <input id="metodotres" name="metodotres" class="form-control">
   </div>
 
