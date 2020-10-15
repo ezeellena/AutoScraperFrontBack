@@ -25,33 +25,37 @@ def _aggregate_result(result):
         continue
     return final_result
 
+@app.route('/GuardarRegla', methods=['POST'])
+def autoscraper():
+    regla = request.json["regla"]
+    scraper.keep_rules(regla)
+    pagina = url.replace("http:", "").replace("//", "").replace(".", "").replace("www", "").replace(
+        "https:", "").replace("/", "").replace("\n", "").replace("-", "")
+
+    scraper.save(pagina + '-search.json')
 
 
-@app.route('/AutoScraper', methods=['POST'])
+@app.route('/ObtenerRegla', methods=['POST'])
 def autoscraper():
     link = request.json["Link"]
+    global url
     url = request.json["Link"]
     wanted_list = request.json["Metodo"]
+    global scraper
     scraper = AutoScraper()
     wanted_dict = {
-        'url': ['https://unoalvear.com/2020/08/14/fondo-sojero-mendoza-le-hara-juicio-a-la-nacion/']
+        'url': ['https://www.rosario3.com/policiales/Robaron-dos-autos-de-alta-gama-de-una-concesionaria-y-los-encontraron-en-un-galpon-20201014-0080.html',
+                'https://www.rosario3.com/-economia-negocios-agro-/La-inflacion-de-septiembre-fue-del-28-segun-el-Indec-20201014-0087.html',
+                'https://www.rosario3.com/informaciongeneral/Coronavirus-confirmaron-el-primer-caso-de-reinfeccion-en-Rosario-20201014-0030.html']
     }
     scraper.build(url=link, wanted_dict=wanted_dict)
     dict = scraper.get_result_similar(link, grouped=True)
 
     regla = []
     [regla.extend([k]) for k in dict.keys()]
-
-    scraper.keep_rules(regla)
-
-    url = url.replace("http:", "").replace("//", "").replace(".", "").replace("www", "").replace(
-        "https:", "").replace("/", "").replace("\n", "").replace("-", "")
-
-    scraper.save(url + '-search.json')
-    data = get_pagina_result(url, link)
-    json_format = json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True, ensure_ascii=False)
-
-    return json_format
+    #data = get_pagina_result(url, link)
+    #json_format = json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True, ensure_ascii=False)
+    return regla
 
 
 @app.route('/', methods=['GET'])
